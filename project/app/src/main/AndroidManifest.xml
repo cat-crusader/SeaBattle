@@ -14,7 +14,11 @@
             android:exported="false" />
         <activity
             android:name=".PlacementOfShips"
+            android:parentActivityName=".MainActivity"
             android:exported="false" />
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.example.seabattle.MainActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
