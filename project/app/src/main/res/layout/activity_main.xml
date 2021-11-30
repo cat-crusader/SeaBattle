@@ -1,18 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:layout_margin="10dp"
+    >
 
-    <TextView
+    <Button
+        android:id="@+id/button_versus_bot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="Versus bot"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/button_with_friend"
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+/>
+
+    <Button
+        android:id="@+id/button_with_friend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="With friend"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/button_play_via_bluetooth"
+
+ />
+
+    <Button
+        android:id="@+id/button_play_via_bluetooth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Play via Bluetooth"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/button_online_battle"
+ />
+
+    <Button
+        android:id="@+id/button_online_battle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Online battle"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="60dp"
+/>
+
+</RelativeLayout>
