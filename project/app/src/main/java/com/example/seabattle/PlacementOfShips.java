@@ -35,7 +35,7 @@ public class PlacementOfShips extends AppCompatActivity implements
         setContentView(R.layout.activity_placement_of_ships);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
-        layoutView = findViewById(R.id.layout_ship_placement);
+        layoutView = findViewById(R.id.image_ship_of1);
 
         layoutView.setOnTouchListener(this);
         mGestureDetector = new GestureDetector(this,this);

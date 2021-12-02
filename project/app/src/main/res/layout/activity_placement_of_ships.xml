@@ -1,10 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_ship_placement"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PlacementOfShips">
+    tools:context=".PlacementOfShips"
+    android:layout_margin="30dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:id="@+id/image_ship_of1"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:srcCompat="@drawable/ship_sprite"
+        tools:layout_editor_absoluteX="527dp"
+        tools:layout_editor_absoluteY="55dp" />
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                app:srcCompat="@drawable/empty_cell_sprite"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                />
+            <ImageView
+                app:srcCompat="@drawable/empty_cell_sprite"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <ImageView
+                app:srcCompat="@drawable/empty_cell_sprite"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </TableLayout>
+</RelativeLayout>
