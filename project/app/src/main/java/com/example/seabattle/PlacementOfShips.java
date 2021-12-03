@@ -11,6 +11,7 @@ import android.view.DragEvent;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -83,8 +84,11 @@ public class PlacementOfShips extends AppCompatActivity implements
             tableView.addView(tr);
         }
     }
-    public void InitiateGridElement(boolean cellValue,int posX,int posY){
+    public void RedactCellElement(boolean cellValue,int posX,int posY){
+        View row = ((ViewGroup) tableView).getChildAt(posY);
+        ImageView image =(ImageView) ((ViewGroup) row).getChildAt(posX);
 
+        image.setImageResource(R.drawable.ship_sprite);
     }
     public int[] GetTableElement(int [] coordinates){
 
@@ -203,7 +207,7 @@ public class PlacementOfShips extends AppCompatActivity implements
                 int[] cell = GetTableElement(new int[]{(int)event.getX(),(int)(event.getY())});
                 Log.d(TAG, "Coords: " + cell[0] +" : "+ cell[1]);
                 Log.d(TAG, "onDrag: ended.");
-
+                RedactCellElement(true,cell[0],cell[1]);
 
                 return true;
 
