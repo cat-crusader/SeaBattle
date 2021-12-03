@@ -2,6 +2,7 @@ package com.example.seabattle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -10,6 +11,13 @@ import android.view.DragEvent;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+
+import java.util.Arrays;
 
 public class PlacementOfShips extends AppCompatActivity implements
         View.OnTouchListener,
@@ -20,6 +28,7 @@ public class PlacementOfShips extends AppCompatActivity implements
 
 //      widgets
     private View layoutView;
+    private TableLayout tableView;
 
 
 
@@ -37,11 +46,68 @@ public class PlacementOfShips extends AppCompatActivity implements
 
         layoutView = findViewById(R.id.image_ship_of1);
 
+
         layoutView.setOnTouchListener(this);
         mGestureDetector = new GestureDetector(this,this);
+        tableView = findViewById(R.id.layouttable_set_ships);
 
+        Button testButton = findViewById(R.id.test_button2);
+        testButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int[] tableCoordinates = new int[2];
+                tableView.getLocationOnScreen(tableCoordinates);
+                Log.d(TAG, "fucking android studio" + tableCoordinates[0] + " : "+ tableCoordinates[1]);
+
+            }
+        });
+
+        InitiateTable(new Grid(10,10));
     }
 
+    //region Table
+    public void InitiateTable(Grid grid){
+        for (int i = 0; i < 10; i++) {
+
+            TableRow tr = new TableRow(this);
+            tr.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
+
+            for (int j = 0; j < 10; j++) {
+
+                ImageView view = new ImageView(this);
+                view.setImageResource(R.drawable.empty_cell_sprite);
+                tr.addView(view);
+                view.getLayoutParams().height=60;
+                view.getLayoutParams().width=60;
+            }
+            tableView.addView(tr);
+        }
+    }
+    public void InitiateGridElement(boolean cellValue,int posX,int posY){
+
+    }
+    public int[] GetTableElement(int [] coordinates){
+
+        int[] tableCoordinates = new int[2];
+        tableView.getLocationOnScreen(tableCoordinates);
+        //Log.d(TAG, "fucking android studio" + tableCoordinates[0] + " : "+ tableCoordinates[1]);
+        int[] cellTableCoordinates = new int[2];
+        int cellSize = 60;
+        int tableSize = cellSize*10;
+        if(tableCoordinates[0]>coordinates[0]||tableCoordinates[1]>coordinates[1])return new int[]{-1,-1};
+        if(tableCoordinates[0]+tableSize<coordinates[0]||tableCoordinates[1]+tableSize< coordinates[1])return new int[]{-1,-1};
+
+        coordinates[0]-=tableCoordinates[0];
+        coordinates[1]-=tableCoordinates[1];
+        cellTableCoordinates[0] = coordinates[0]/cellSize;
+        cellTableCoordinates[1] = coordinates[1]/cellSize;
+
+        return cellTableCoordinates;
+    }
+
+    //endregion
+
+    //region Touch functions
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         mGestureDetector.onTouchEvent(event);
@@ -132,6 +198,10 @@ public class PlacementOfShips extends AppCompatActivity implements
                 return true;
 
             case DragEvent.ACTION_DRAG_ENDED:
+//                event.getClipDescription();
+//                Log.d(TAG, event.getClipDescription().toString());
+                int[] cell = GetTableElement(new int[]{(int)event.getX(),(int)(event.getY())});
+                Log.d(TAG, "Coords: " + cell[0] +" : "+ cell[1]);
                 Log.d(TAG, "onDrag: ended.");
 
 
@@ -145,4 +215,5 @@ public class PlacementOfShips extends AppCompatActivity implements
         }
         return false;
     }
+    //endregion
 }

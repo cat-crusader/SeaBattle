@@ -6,51 +6,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".PlacementOfShips"
-    android:layout_margin="30dp">
+    android:layout_margin="60px">
 
     <ImageView
         android:id="@+id/image_ship_of1"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="60px"
+        android:layout_height="60px"
         app:srcCompat="@drawable/ship_sprite"
         tools:layout_editor_absoluteX="527dp"
         tools:layout_editor_absoluteY="55dp" />
 
     <TableLayout
+        android:id="@+id/layouttable_set_ships"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true">
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"></TableLayout>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <ImageView
-                app:srcCompat="@drawable/empty_cell_sprite"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                />
-            <ImageView
-                app:srcCompat="@drawable/empty_cell_sprite"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                />
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-            <ImageView
-                app:srcCompat="@drawable/empty_cell_sprite"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </TableLayout>
+    <Button
+        android:id="@+id/test_button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="287dp"
+        android:layout_marginEnd="304dp"
+        android:layout_marginBottom="3dp"
+        android:text="Button" />
 </RelativeLayout>
