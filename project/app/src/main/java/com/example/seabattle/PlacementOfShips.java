@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.GestureDetector;
@@ -35,6 +36,7 @@ public class PlacementOfShips extends AppCompatActivity implements
 
     private TableLayout tableView;
 
+    private View globalView;
 
 
 //      vars
@@ -61,21 +63,51 @@ public class PlacementOfShips extends AppCompatActivity implements
 
         mGestureDetector = new GestureDetector(this,this);
         tableView = findViewById(R.id.layouttable_set_ships);
+        globalView = findViewById(R.id.layout_ship_placement);
 
         Button testButton = findViewById(R.id.test_button2);
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int[] tableCoordinates = new int[2];
-                tableView.getLocationOnScreen(tableCoordinates);
-                Log.d(TAG, "fucking android studio" + tableCoordinates[0] + " : "+ tableCoordinates[1]);
+                int[] viewCoordinates = new int[2];
+                shipOf1View.getLocationInWindow(viewCoordinates);
+                Log.d(TAG,"view coords of ship2 "+viewCoordinates[0]+" : "+viewCoordinates[1]);
 
             }
         });
 
         InitiateTable(new Grid(10,10));
     }
+    boolean isInsideElement(int elemPosX,int elemPosY,int width,int height,int posX,int posY){
+        if(elemPosX>posX||elemPosY>posY)return false;
+        if(elemPosX+width<posX||elemPosY+height<posY)return false;
 
+        return true;
+    }
+    void SetDrag(View view,int width,int height,MotionEvent e){
+        int[] viewCoordinates = new int[2];
+        view.getLocationOnScreen(viewCoordinates);
+
+        DisplayMetrics dm = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+        int topOffset = dm.heightPixels - globalView.getMeasuredHeight();
+        int y=(int)e.getRawY()-topOffset+120;
+//        Log.d(TAG,"offset"+topOffset);
+//        Log.d(TAG,"Setting drag "+e.getRawX()+" : "+y);
+//        Log.d(TAG,"view coords "+viewCoordinates[0]+" : "+(viewCoordinates[1]-topOffset+120));//ERROR second uncorrect
+        if(!isInsideElement(viewCoordinates[0],(viewCoordinates[1]-topOffset+120),width,height,(int)e.getRawX(),y))return;
+
+
+        View.DragShadowBuilder builder = new View.DragShadowBuilder(view);
+
+        view.startDrag(null,
+                builder,
+                null,
+                0);
+
+        builder.getView().setOnDragListener(this);
+    }
     //region Table
     public void InitiateTable(Grid grid){
         for (int i = 0; i < 10; i++) {
@@ -165,14 +197,11 @@ public class PlacementOfShips extends AppCompatActivity implements
     @Override
     public void onLongPress(MotionEvent e) {
         Log.d(TAG,"Action was onLongPress");
-        View.DragShadowBuilder builder = new View.DragShadowBuilder(shipOf1View);
-
-        shipOf1View.startDrag(null,
-                builder,
-                null,
-                0);
-
-        builder.getView().setOnDragListener(this);
+//        SetDrag(shipOf1View,60,60,e);
+        SetDrag(shipOf1View,60,60,e);
+        SetDrag(shipOf2View,120,120,e);
+        SetDrag(shipOf3View,180,180,e);
+        SetDrag(shipOf4View,240,240,e);
 
     }
 

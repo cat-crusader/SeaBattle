@@ -12,33 +12,31 @@
         android:id="@+id/image_ship_of1"
         android:layout_width="60px"
         android:layout_height="60px"
-        app:srcCompat="@drawable/ship_sprite"
-        tools:layout_editor_absoluteX="527dp"
-        tools:layout_editor_absoluteY="55dp" />
+        app:srcCompat="@drawable/ship_sprite" />
+
     <ImageView
         android:id="@+id/image_ship_of2"
         android:layout_width="120px"
         android:layout_height="120px"
-        app:srcCompat="@drawable/ship_length_of_2"
         android:layout_below="@id/image_ship_of1"
         android:layout_marginTop="20px"
-        />
+        app:srcCompat="@drawable/ship_length_of_2" />
+
     <ImageView
         android:id="@+id/image_ship_of3"
         android:layout_width="180px"
         android:layout_height="180px"
-        app:srcCompat="@drawable/ship_length_of_3"
         android:layout_below="@id/image_ship_of2"
         android:layout_marginTop="20px"
-        />
+        app:srcCompat="@drawable/ship_length_of_3" />
+
     <ImageView
         android:id="@+id/image_ship_of4"
         android:layout_width="240px"
         android:layout_height="240px"
-        app:srcCompat="@drawable/ship_length_of_4"
         android:layout_below="@id/image_ship_of3"
         android:layout_marginTop="20px"
-        />
+        app:srcCompat="@drawable/ship_length_of_4" />
 
     <TableLayout
         android:id="@+id/layouttable_set_ships"
