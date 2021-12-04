@@ -28,7 +28,11 @@ public class PlacementOfShips extends AppCompatActivity implements
     private  static final String TAG = "PlacementOfShips";
 
 //      widgets
-    private View layoutView;
+    private View shipOf1View;
+    private View shipOf2View;
+    private View shipOf3View;
+    private View shipOf4View;
+
     private TableLayout tableView;
 
 
@@ -45,10 +49,16 @@ public class PlacementOfShips extends AppCompatActivity implements
         setContentView(R.layout.activity_placement_of_ships);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
-        layoutView = findViewById(R.id.image_ship_of1);
+        shipOf1View = findViewById(R.id.image_ship_of1);
+        shipOf2View = findViewById(R.id.image_ship_of2);
+        shipOf3View = findViewById(R.id.image_ship_of3);
+        shipOf4View = findViewById(R.id.image_ship_of4);//ships images
 
+        shipOf1View.setOnTouchListener(this);
+        shipOf2View.setOnTouchListener(this);
+        shipOf3View.setOnTouchListener(this);
+        shipOf4View.setOnTouchListener(this);// drag&drop for ships
 
-        layoutView.setOnTouchListener(this);
         mGestureDetector = new GestureDetector(this,this);
         tableView = findViewById(R.id.layouttable_set_ships);
 
@@ -155,9 +165,9 @@ public class PlacementOfShips extends AppCompatActivity implements
     @Override
     public void onLongPress(MotionEvent e) {
         Log.d(TAG,"Action was onLongPress");
-        View.DragShadowBuilder builder = new View.DragShadowBuilder(layoutView);
+        View.DragShadowBuilder builder = new View.DragShadowBuilder(shipOf1View);
 
-        layoutView.startDrag(null,
+        shipOf1View.startDrag(null,
                 builder,
                 null,
                 0);
