@@ -19,7 +19,9 @@ import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class PlacementOfShips extends AppCompatActivity implements
         View.OnTouchListener,
@@ -40,6 +42,7 @@ public class PlacementOfShips extends AppCompatActivity implements
 
 
 //      vars
+    private Grid placementGrid;
     private GestureDetector mGestureDetector;
 
 
@@ -77,6 +80,13 @@ public class PlacementOfShips extends AppCompatActivity implements
         });
 
         InitiateTable(new Grid(10,10));
+    }
+    void PlaceShip(DragEvent event,int size){
+        int[] cell = GetTableElement(new int[]{(int)event.getX(),(int)(event.getY())});//center of ship
+
+        Log.d(TAG, "Coords: " + cell[0] +" : "+ cell[1]);
+        Log.d(TAG, "onDrag: ended.");
+        RedactCellElement(true,cell[0],cell[1]);
     }
     boolean isInsideElement(int elemPosX,int elemPosY,int width,int height,int posX,int posY){
         if(elemPosX>posX||elemPosY>posY)return false;
@@ -244,9 +254,42 @@ public class PlacementOfShips extends AppCompatActivity implements
 //                event.getClipDescription();
 //                Log.d(TAG, event.getClipDescription().toString());
                 int[] cell = GetTableElement(new int[]{(int)event.getX(),(int)(event.getY())});
-                Log.d(TAG, "Coords: " + cell[0] +" : "+ cell[1]);
-                Log.d(TAG, "onDrag: ended.");
-                RedactCellElement(true,cell[0],cell[1]);
+                boolean isUpperPart=false;
+                if ((int)(event.getY())%60<30)isUpperPart=true;
+
+                if (cell[0]==-1||cell[1]==-1)return true;//if not inside table
+
+                int length=0;
+
+//                Log.d(TAG, "Coords: " + cell[0] +" : "+ cell[1]);
+//                Log.d(TAG, "onDrag: ended. view: "+v.getId());
+
+                if(v.getId()==shipOf1View.getId()) {
+                    Log.d(TAG, "catter");
+                    length=1;
+                }
+                if(v.getId()==shipOf2View.getId()){
+                    Log.d(TAG, "missile boat");
+                    length=2;
+                }
+                if(v.getId()==shipOf3View.getId()){
+                    Log.d(TAG, "DESTROYER");
+                    length=3;
+                }
+                if(v.getId()==shipOf4View.getId()){
+                    Log.d(TAG, "THATS SOME HUGE ASS AIRCRAFTCARRIER");
+                    length=4;
+                }
+                Log.d(TAG, "Length of ship: "+length);
+                Ship newShip = new Ship(length);
+                newShip.Place(cell,isUpperPart);
+                ArrayList<int[]> shipList = newShip.getCorpus();
+                for (int[] part: shipList
+                     ) {
+
+                    RedactCellElement(true,part[0],part[1]);
+                }
+                //RedactCellElement(true,cell[0],cell[1]);
 
                 return true;
 
