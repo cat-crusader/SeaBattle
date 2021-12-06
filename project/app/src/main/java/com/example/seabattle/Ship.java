@@ -11,6 +11,7 @@ public class Ship {
     private int length;
     private int[]rootCell;
     private ArrayList<int[]> corpus;
+    private boolean turnVertically;
 
     public Ship(int len){
         length=len;
@@ -18,7 +19,7 @@ public class Ship {
         corpus = new ArrayList<>();
     }
     public void Turn(){
-
+        InitiateShip(!turnVertically);
     }
     public void Place(int[]cellPosition,boolean isCursorInUpperHalf){
         Log.d(TAG, "Placing ship"+length);
@@ -39,13 +40,22 @@ public class Ship {
                 break;
         }
         Log.d(TAG, "Initiating ship : "+rootCell[0]+":"+rootCell[1]);
-        InitiateShip();
+        InitiateShip(true);
     }
-    public void InitiateShip(){
-        for (int i = 0; i < length; i++) {
-            Log.d(TAG, "Initiate corpus: "+rootCell[0]+":"+(rootCell[1]-i));
-            corpus.add(new int[]{rootCell[0],(rootCell[1]-i)});
-        }
+    public void InitiateShip(boolean vertically){
+        turnVertically=vertically;
+        corpus.clear();
+        if(vertically){
+            for (int i = 0; i < length; i++) {
+                Log.d(TAG, "Initiate corpus: "+rootCell[0]+":"+(rootCell[1]-i));
+                corpus.add(new int[]{rootCell[0],(rootCell[1]-i)});
+            } }
+        else {
+            for (int i = 0; i < length; i++) {
+                Log.d(TAG, "Initiate corpus: " + (rootCell[0] + i) + ":" + rootCell[1]);
+                corpus.add(new int[]{(rootCell[0] + i), rootCell[1]});
+
+            } }
     }
 
     public ArrayList<int[]> getCorpus() {

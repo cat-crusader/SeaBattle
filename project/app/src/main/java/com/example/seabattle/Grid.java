@@ -1,5 +1,7 @@
 package com.example.seabattle;
 
+import java.util.Arrays;
+
 public class Grid {
 
     private boolean[][] grid;
@@ -35,6 +37,10 @@ public class Grid {
         sizeX = sizeX;
         sizeY = sizeY;
         grid = new boolean[sizeX][sizeY];
+    }
+    public void fill(boolean filler){
+        for (boolean[] row: grid)
+            Arrays.fill(row, filler);
     }
 
     public void SetCell(int xPos,int yPos,boolean value){
