@@ -1,8 +1,11 @@
 package com.example.seabattle;
 
+import android.util.Log;
+
 import java.util.Arrays;
 
 public class Grid {
+    private  static final String TAG = "GRID";
 
     private boolean[][] grid;
 
@@ -33,9 +36,9 @@ public class Grid {
         this.sizeX = sizeX;
     }
 
-    public Grid(int sizeX, int sizeY){
-        sizeX = sizeX;
-        sizeY = sizeY;
+    public Grid(int _sizeX, int _sizeY){
+        sizeX = _sizeX;
+        sizeY = _sizeY;
         grid = new boolean[sizeX][sizeY];
     }
     public void fill(boolean filler){
@@ -45,5 +48,14 @@ public class Grid {
 
     public void SetCell(int xPos,int yPos,boolean value){
         grid[xPos][yPos] = value;
+    }
+    public void LogGrid(){
+        for (int i = 0; i < sizeX ; i++) {
+            String row="";
+            for (int j = 0; j < sizeY; j++) {
+                row+=grid[j][i] ? 1 +" ": 0 +" ";
+            }
+            Log.d(TAG, "row"+i+": "+row);
+        }
     }
 }

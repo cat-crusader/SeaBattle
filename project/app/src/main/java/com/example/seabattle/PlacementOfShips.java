@@ -2,9 +2,7 @@ package com.example.seabattle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -15,13 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Stack;
 
 public class PlacementOfShips extends AppCompatActivity implements
         View.OnTouchListener,
@@ -42,9 +38,12 @@ public class PlacementOfShips extends AppCompatActivity implements
 
 
 //      vars
+
     private Grid shipsGrid;
     private Grid placementGrid;
     private GestureDetector mGestureDetector;
+
+    private Stack<Ship> shipsStack = new Stack<>();
 
 
 
@@ -58,6 +57,7 @@ public class PlacementOfShips extends AppCompatActivity implements
         shipsGrid = new Grid(10,10);
         placementGrid = new Grid(10,10);
         placementGrid.fill(true);
+        shipsGrid.fill(false);
 //        Arrays.fill(,true);
 
         shipOf1View = findViewById(R.id.image_ship_of1);
@@ -78,15 +78,16 @@ public class PlacementOfShips extends AppCompatActivity implements
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int[] viewCoordinates = new int[2];
-                shipOf1View.getLocationInWindow(viewCoordinates);
-                Log.d(TAG,"view coords of ship2 "+viewCoordinates[0]+" : "+viewCoordinates[1]);
-
+//                int[] viewCoordinates = new int[2];
+//                shipOf1View.getLocationInWindow(viewCoordinates);
+//                Log.d(TAG,"view coords of ship2 "+viewCoordinates[0]+" : "+viewCoordinates[1]);
+                    RotateShip();
             }
         });
 
         InitiateTable(new Grid(10,10));
     }
+
     boolean CanBePlaced(Ship ship){
         ArrayList<int[]> shipPart = ship.getCorpus();
         for (int[] part: shipPart
@@ -100,6 +101,38 @@ public class PlacementOfShips extends AppCompatActivity implements
 
 
         return true;
+    }
+    public void RotateShip(){
+
+        Ship rotatedShip = new Ship(shipsStack.peek());
+        rotatedShip.Rotate();
+
+        if(!CanBePlaced(rotatedShip))return;
+        rotatedShip.Rotate();
+        ArrayList<int[]> rotatedShipList = rotatedShip.getCorpus();
+
+
+
+
+        shipsGrid.LogGrid();
+        for (int[] part: rotatedShipList//deleting old version
+        ) {
+            shipsGrid.SetCell(part[0],part[1],false);
+            Log.d(TAG,"deleting: "+part[0]+":"+part[1]);
+            //RedactCellElement(true,part[0],part[1]);
+        }
+        rotatedShip.Rotate();
+        rotatedShipList = rotatedShip.getCorpus();
+//        shipsGrid.LogGrid();
+        for (int[] part: rotatedShipList//setting rotated version
+        ) {
+            shipsGrid.SetCell(part[0],part[1],true);
+            //RedactCellElement(true,part[0],part[1]);
+        }
+        shipsStack.pop();
+        shipsStack.add(rotatedShip);
+        UpdateTable(shipsGrid);
+//        shipsGrid.LogGrid();
     }
     void PlaceShip(DragEvent event,View v){
         int[] cell = GetTableElement(new int[]{(int)event.getX(),(int)(event.getY())});
@@ -136,9 +169,11 @@ public class PlacementOfShips extends AppCompatActivity implements
         if(!CanBePlaced(newShip))return;
         for (int[] part: shipList
         ) {
-
-            RedactCellElement(true,part[0],part[1]);
+            shipsGrid.SetCell(part[0],part[1],true);
+            //RedactCellElement(true,part[0],part[1]);
         }
+        shipsStack.add(newShip);
+        UpdateTable(shipsGrid);
     }
     boolean isInsideElement(int elemPosX,int elemPosY,int width,int height,int posX,int posY){
         if(elemPosX>posX||elemPosY>posY)return false;
@@ -170,6 +205,7 @@ public class PlacementOfShips extends AppCompatActivity implements
 
         builder.getView().setOnDragListener(this);
     }
+
     //region Table
     public void InitiateTable(Grid grid){
         for (int i = 0; i < 10; i++) {
@@ -188,11 +224,27 @@ public class PlacementOfShips extends AppCompatActivity implements
             tableView.addView(tr);
         }
     }
+    public void UpdateTable(Grid grid){
+        boolean[][]table = grid.getGrid();
+        Log.d(TAG,"Update Table ");
+        for (int i = 0; i < grid.getSizeX(); i++) {
+            for (int j = 0; j < grid.getSizeY(); j++) {
+
+                if(table[i][j]==true) {
+                    RedactCellElement(true, i, j);
+//                    Log.d(TAG,"Cell: "+i+" : "+j+" are ship");
+                }
+                else RedactCellElement(false,i,j);
+            }
+        }
+
+    }
     public void RedactCellElement(boolean cellValue,int posX,int posY){
         View row = ((ViewGroup) tableView).getChildAt(posY);
         ImageView image =(ImageView) ((ViewGroup) row).getChildAt(posX);
 
-        image.setImageResource(R.drawable.ship_sprite);
+        if(cellValue==true)image.setImageResource(R.drawable.ship_sprite);
+        else image.setImageResource(R.drawable.empty_cell_sprite);
     }
     public int[] GetTableElement(int [] coordinates){
 
