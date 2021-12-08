@@ -10,18 +10,14 @@ public class Ship {
     private int length;
     private int[]rootCell;
     private ArrayList<int[]> corpus;
+    private ArrayList<int[]> shadow;
     private boolean rotatedVertically;
 
     public Ship(int len){
         length=len;
         rootCell=new int[]{-1,-1};
         corpus = new ArrayList<>();
-    }
-    public Ship(Ship copyShip){
-        length = copyShip.length;
-        rootCell =copyShip.rootCell;
-        corpus = copyShip.corpus;
-        rotatedVertically = copyShip.rotatedVertically;
+        shadow = new ArrayList<>();
     }
 
     public void Rotate(){
@@ -66,6 +62,27 @@ public class Ship {
                 corpus.add(new int[]{(rootCell[0] + i), rootCell[1]});
 
             } }
+        InitiateShadow();
+    }
+    public void InitiateShadow(){
+        shadow.clear();
+        if(!corpus.isEmpty()){
+            for (int c = 0; c < corpus.size(); c++){
+                InitiateCellShadow(c);
+            }
+        }
+    }
+    public void InitiateCellShadow(int cellIndex){
+        for (int x = -1; x <= 1; x++) {
+            for (int y = -1; y <= 1; y++) {
+                int[] currentCell = new int[]{corpus.get(cellIndex)[0]+x,corpus.get(cellIndex)[1]+y};
+                if(corpus.contains(currentCell));// shadow cant be placed on ship
+                else if(shadow.contains(currentCell));// shadow cant be placed on existing shadow
+                else{
+                    shadow.add(currentCell);//add shadow cell
+                }
+            }
+        }
     }
     public void LogCorpus(){
 
@@ -75,6 +92,14 @@ public class Ship {
             Log.d(TAG,"corpus: "+part[0]+":"+part[1]);
             //RedactCellElement(true,part[0],part[1]);
         }
+    }
+
+    public ArrayList<int[]> getShadow() {
+        return shadow;
+    }
+
+    public void setShadow(ArrayList<int[]> shadow) {
+        this.shadow = shadow;
     }
 
     public ArrayList<int[]> getCorpus() {

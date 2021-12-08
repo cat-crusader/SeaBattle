@@ -1,8 +1,10 @@
 package com.example.seabattle;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -40,9 +42,11 @@ public class PlacementOfShips extends AppCompatActivity implements
 //      vars
 
     private Grid shipsGrid;
-    private Grid placementGrid;
+    private Grid shadowGrid;
+    private Grid shadowGridtest;
     private GestureDetector mGestureDetector;
 
+    private int[] shipsAmmount ={4,3,2,1};
     private Stack<Ship> shipsStack = new Stack<>();
 
 
@@ -55,8 +59,10 @@ public class PlacementOfShips extends AppCompatActivity implements
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         shipsGrid = new Grid(10,10);
-        placementGrid = new Grid(10,10);
-        placementGrid.fill(true);
+        shadowGrid = new Grid(10,10);
+        shadowGridtest = new Grid(10,10);
+        shadowGrid.fill(true);
+        shadowGridtest.fill(false);
         shipsGrid.fill(false);
 //        Arrays.fill(,true);
 
@@ -95,7 +101,7 @@ public class PlacementOfShips extends AppCompatActivity implements
             if(part[0]>9||part[1]>9)return false;
             if(part[0]<0||part[1]<0)return false;//out of grid
 
-            if(!placementGrid.getGrid()[part[0]][part[1]])return false;
+            if(!shadowGrid.getGrid()[part[0]][part[1]])return false;
 
         }
 
@@ -104,7 +110,7 @@ public class PlacementOfShips extends AppCompatActivity implements
     }
     public void RotateShip(){
 
-        Ship rotatedShip = new Ship(shipsStack.peek());
+        Ship rotatedShip = shipsStack.peek();
         rotatedShip.Rotate();
 
         if(!CanBePlaced(rotatedShip))return;
@@ -150,29 +156,44 @@ public class PlacementOfShips extends AppCompatActivity implements
             Log.d(TAG, "catter");
             length=1;
         }
-        if(v.getId()==shipOf2View.getId()){
+        else if(v.getId()==shipOf2View.getId()){
             Log.d(TAG, "missile boat");
             length=2;
         }
-        if(v.getId()==shipOf3View.getId()){
+        else if(v.getId()==shipOf3View.getId()){
             Log.d(TAG, "DESTROYER");
             length=3;
         }
-        if(v.getId()==shipOf4View.getId()){
+        else if(v.getId()==shipOf4View.getId()){
             Log.d(TAG, "THATS SOME HUGE ASS AIRCRAFTCARRIER");
             length=4;
+
         }
+
         Log.d(TAG, "Length of ship: "+length);
+
+
         Ship newShip = new Ship(length);
         newShip.Place(cell,isUpperPart);
-        ArrayList<int[]> shipList = newShip.getCorpus();
+
         if(!CanBePlaced(newShip))return;
+        if(shipsAmmount[length-1]<=0)return;
+
+        shipsStack.add(newShip);
+        shipsAmmount[length-1]--;
+        ArrayList<int[]> shipList = shipsStack.peek().getCorpus();
         for (int[] part: shipList
         ) {
             shipsGrid.SetCell(part[0],part[1],true);
             //RedactCellElement(true,part[0],part[1]);
         }
-        shipsStack.add(newShip);
+        ArrayList<int[]> shadowList = shipsStack.peek().getShadow();
+        for (int[] part: shadowList
+        ) {
+            shadowGrid.SetCell(part[0],part[1],false);
+            //RedactCellElement(true,part[0],part[1]);
+        }
+
         UpdateTable(shipsGrid);
     }
     boolean isInsideElement(int elemPosX,int elemPosY,int width,int height,int posX,int posY){
@@ -226,7 +247,8 @@ public class PlacementOfShips extends AppCompatActivity implements
     }
     public void UpdateTable(Grid grid){
         boolean[][]table = grid.getGrid();
-        Log.d(TAG,"Update Table ");
+//        Log.d(TAG,"Update Table ");
+//        Log.d(TAG,"current amount of ships: "+shipsStack.size());
         for (int i = 0; i < grid.getSizeX(); i++) {
             for (int j = 0; j < grid.getSizeY(); j++) {
 
@@ -237,6 +259,7 @@ public class PlacementOfShips extends AppCompatActivity implements
                 else RedactCellElement(false,i,j);
             }
         }
+        shadowGridtest.LogGrid();
 
     }
     public void RedactCellElement(boolean cellValue,int posX,int posY){
@@ -326,6 +349,7 @@ public class PlacementOfShips extends AppCompatActivity implements
         return false;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public boolean onDrag(View v, DragEvent event) {
         switch(event.getAction()) {
@@ -357,44 +381,11 @@ public class PlacementOfShips extends AppCompatActivity implements
             case DragEvent.ACTION_DRAG_ENDED:
 //                event.getClipDescription();
 //                Log.d(TAG, event.getClipDescription().toString());
+                Log.d(TAG, "onDrag: ended.");
+
                 PlaceShip(event,v);
-//                int[] cell = GetTableElement(new int[]{(int)event.getX(),(int)(event.getY())});
-//                boolean isUpperPart=false;
-//                if ((int)(event.getY())%60<30)isUpperPart=true;
-//
-//                if (cell[0]==-1||cell[1]==-1)return true;//if not inside table
-//
-//                int length=0;
-//
-////                Log.d(TAG, "Coords: " + cell[0] +" : "+ cell[1]);
-////                Log.d(TAG, "onDrag: ended. view: "+v.getId());
-//
-//                if(v.getId()==shipOf1View.getId()) {
-//                    Log.d(TAG, "catter");
-//                    length=1;
-//                }
-//                if(v.getId()==shipOf2View.getId()){
-//                    Log.d(TAG, "missile boat");
-//                    length=2;
-//                }
-//                if(v.getId()==shipOf3View.getId()){
-//                    Log.d(TAG, "DESTROYER");
-//                    length=3;
-//                }
-//                if(v.getId()==shipOf4View.getId()){
-//                    Log.d(TAG, "THATS SOME HUGE ASS AIRCRAFTCARRIER");
-//                    length=4;
-//                }
-//                Log.d(TAG, "Length of ship: "+length);
-//                Ship newShip = new Ship(length);
-//                newShip.Place(cell,isUpperPart);
-//                ArrayList<int[]> shipList = newShip.getCorpus();
-//                for (int[] part: shipList
-//                     ) {
-//
-//                    RedactCellElement(true,part[0],part[1]);
-//                }
-                //RedactCellElement(true,cell[0],cell[1]);
+
+//                v.cancelDragAndDrop();
 
                 return true;
 
