@@ -77,14 +77,24 @@ public class PlacementOfShips extends AppCompatActivity implements
         tableView = findViewById(R.id.layouttable_set_ships);
         globalView = findViewById(R.id.layout_ship_placement);
 
-        Button testButton = findViewById(R.id.test_button2);
-        testButton.setOnClickListener(new View.OnClickListener() {
+        Button rotationButton = findViewById(R.id.button_rotation);
+        rotationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                int[] viewCoordinates = new int[2];
 //                shipOf1View.getLocationInWindow(viewCoordinates);
 //                Log.d(TAG,"view coords of ship2 "+viewCoordinates[0]+" : "+viewCoordinates[1]);
                     RotateShip();
+            }
+        });
+        Button autoPlacementButton = findViewById(R.id.button_auto_placement);
+        autoPlacementButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                int[] viewCoordinates = new int[2];
+//                shipOf1View.getLocationInWindow(viewCoordinates);
+//                Log.d(TAG,"view coords of ship2 "+viewCoordinates[0]+" : "+viewCoordinates[1]);
+//                RotateShip();
             }
         });
 
