@@ -19,6 +19,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Stack;
 
 public class PlacementOfShips extends AppCompatActivity implements
@@ -46,6 +47,7 @@ public class PlacementOfShips extends AppCompatActivity implements
     private GestureDetector mGestureDetector;
 
     private int[] shipsAmmount ={4,3,2,1};
+    private int shipsCount=0;
     private Stack<Ship> shipsStack = new Stack<>();
 
 
@@ -91,10 +93,8 @@ public class PlacementOfShips extends AppCompatActivity implements
         autoPlacementButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                int[] viewCoordinates = new int[2];
-//                shipOf1View.getLocationInWindow(viewCoordinates);
-//                Log.d(TAG,"view coords of ship2 "+viewCoordinates[0]+" : "+viewCoordinates[1]);
-//                RotateShip();
+                AutoPlaceFleet();
+
             }
         });
 
@@ -120,10 +120,27 @@ public class PlacementOfShips extends AppCompatActivity implements
             if(cell[0]>9||cell[1]>9)return false;
             if(cell[0]<0||cell[1]<0)return false;//out of grid
 
-
-
-
         return true;
+    }
+    public void AutoPlaceFleet(){
+        for (int t = 0; t < shipsAmmount.length; t++) {
+            int shipsInType = shipsAmmount[t];
+                AutoPlaceShip(t+1);
+
+        }
+    }
+    public void AutoPlaceShip(int shipLength){
+        int shipAmmount = shipsStack.size();
+        while (shipAmmount==shipsStack.size()||shipsAmmount[shipLength-1]>0){
+            Random r = new Random();
+            boolean rotation = r.nextBoolean();
+            int randomYPos = (shipLength-1) + (int) (Math.random() * 10);
+            int randomXPos = 0 + (int) (Math.random() * (11-shipLength));
+            PlaceShip(new int[]{randomXPos,randomYPos},shipLength);
+        }
+
+
+
     }
     public void RotateShip(){
 
@@ -158,7 +175,7 @@ public class PlacementOfShips extends AppCompatActivity implements
         UpdateTable(shipsGrid,R.drawable.ship_sprite,R.drawable.empty_cell_sprite);
 //        shipsGrid.LogGrid();
     }
-    void PlaceShip(DragEvent event,View v){
+    void PlaceShipOnDrag(DragEvent event, View v){
         int[] cell = GetTableElement(new int[]{(int)event.getX(),(int)(event.getY())});
         boolean isUpperPart=false;
         if ((int)(event.getY())%60<30)isUpperPart=true;
@@ -188,11 +205,12 @@ public class PlacementOfShips extends AppCompatActivity implements
 
         }
 
-        Log.d(TAG, "Length of ship: "+length);
+        PlaceShip(cell,length);
 
-
+    }
+    void PlaceShip(int[] cell,int length){
         Ship newShip = new Ship(length);
-        newShip.Place(cell,isUpperPart);
+        newShip.Place(cell);
 
 
         if(!shipsStack.empty()){//create shadow of previous ship
@@ -220,7 +238,6 @@ public class PlacementOfShips extends AppCompatActivity implements
 
         UpdateTable(shadowGrid,R.drawable.empty_cell_sprite,R.drawable.shadow_cell_sprite);
         UpdateTable(shipsGrid,R.drawable.ship_sprite,R.drawable.empty_cell_sprite);
-
     }
     boolean isInsideElement(int elemPosX,int elemPosY,int width,int height,int posX,int posY){
         if(elemPosX>posX||elemPosY>posY)return false;
@@ -409,7 +426,7 @@ public class PlacementOfShips extends AppCompatActivity implements
 //                Log.d(TAG, event.getClipDescription().toString());
                 Log.d(TAG, "onDrag: ended.");
 
-                PlaceShip(event,v);
+                PlaceShipOnDrag(event,v);
 
 //                v.cancelDragAndDrop();
 

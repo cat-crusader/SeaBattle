@@ -48,6 +48,11 @@ public class Ship {
         rotatedVertically=true;
         InitiateShip();
     }
+    public void  Place(int[] rootCellPos){
+        rootCell = rootCellPos;
+        rotatedVertically=true;
+        InitiateShip();
+    }
     public void InitiateShip(){
         corpus.clear();
         Log.d(TAG, "corpus is empty: "+corpus.isEmpty());
