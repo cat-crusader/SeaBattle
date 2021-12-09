@@ -43,7 +43,6 @@ public class PlacementOfShips extends AppCompatActivity implements
 
     private Grid shipsGrid;
     private Grid shadowGrid;
-    private Grid shadowGridtest;
     private GestureDetector mGestureDetector;
 
     private int[] shipsAmmount ={4,3,2,1};
@@ -60,9 +59,7 @@ public class PlacementOfShips extends AppCompatActivity implements
 
         shipsGrid = new Grid(10,10);
         shadowGrid = new Grid(10,10);
-        shadowGridtest = new Grid(10,10);
         shadowGrid.fill(true);
-        shadowGridtest.fill(false);
         shipsGrid.fill(false);
 //        Arrays.fill(,true);
 
@@ -108,6 +105,16 @@ public class PlacementOfShips extends AppCompatActivity implements
 
         return true;
     }
+    boolean InBounds(int[] cell){
+
+            if(cell[0]>9||cell[1]>9)return false;
+            if(cell[0]<0||cell[1]<0)return false;//out of grid
+
+
+
+
+        return true;
+    }
     public void RotateShip(){
 
         Ship rotatedShip = shipsStack.peek();
@@ -137,7 +144,8 @@ public class PlacementOfShips extends AppCompatActivity implements
         }
         shipsStack.pop();
         shipsStack.add(rotatedShip);
-        UpdateTable(shipsGrid);
+
+        UpdateTable(shipsGrid,R.drawable.ship_sprite,R.drawable.empty_cell_sprite);
 //        shipsGrid.LogGrid();
     }
     void PlaceShip(DragEvent event,View v){
@@ -176,8 +184,20 @@ public class PlacementOfShips extends AppCompatActivity implements
         Ship newShip = new Ship(length);
         newShip.Place(cell,isUpperPart);
 
+
+        if(!shipsStack.empty()){//create shadow of previous ship
+            ArrayList<int[]> shadowList = shipsStack.peek().getShadow();
+            for (int[] part: shadowList
+            ) {
+//            if(InBounds(part))
+                if(InBounds(part))shadowGrid.SetCell(part[0],part[1],false);
+                //RedactCellElement(true,part[0],part[1]);
+            }}
+
         if(!CanBePlaced(newShip))return;
         if(shipsAmmount[length-1]<=0)return;
+
+
 
         shipsStack.add(newShip);
         shipsAmmount[length-1]--;
@@ -187,14 +207,10 @@ public class PlacementOfShips extends AppCompatActivity implements
             shipsGrid.SetCell(part[0],part[1],true);
             //RedactCellElement(true,part[0],part[1]);
         }
-        ArrayList<int[]> shadowList = shipsStack.peek().getShadow();
-        for (int[] part: shadowList
-        ) {
-            shadowGrid.SetCell(part[0],part[1],false);
-            //RedactCellElement(true,part[0],part[1]);
-        }
 
-        UpdateTable(shipsGrid);
+        UpdateTable(shadowGrid,R.drawable.empty_cell_sprite,R.drawable.shadow_cell_sprite);
+        UpdateTable(shipsGrid,R.drawable.ship_sprite,R.drawable.empty_cell_sprite);
+
     }
     boolean isInsideElement(int elemPosX,int elemPosY,int width,int height,int posX,int posY){
         if(elemPosX>posX||elemPosY>posY)return false;
@@ -245,7 +261,7 @@ public class PlacementOfShips extends AppCompatActivity implements
             tableView.addView(tr);
         }
     }
-    public void UpdateTable(Grid grid){
+    public void UpdateTable(Grid grid,int shipSpriteId,int emptySpriteId){
         boolean[][]table = grid.getGrid();
 //        Log.d(TAG,"Update Table ");
 //        Log.d(TAG,"current amount of ships: "+shipsStack.size());
@@ -253,21 +269,21 @@ public class PlacementOfShips extends AppCompatActivity implements
             for (int j = 0; j < grid.getSizeY(); j++) {
 
                 if(table[i][j]==true) {
-                    RedactCellElement(true, i, j);
+                    RedactCellElement(true, i, j,shipSpriteId,emptySpriteId);
 //                    Log.d(TAG,"Cell: "+i+" : "+j+" are ship");
                 }
-                else RedactCellElement(false,i,j);
+                else RedactCellElement(false,i,j,shipSpriteId,emptySpriteId);
             }
         }
-        shadowGridtest.LogGrid();
+        shadowGrid.LogGrid();
 
     }
-    public void RedactCellElement(boolean cellValue,int posX,int posY){
+    public void RedactCellElement(boolean cellValue,int posX,int posY,int trueSpriteId,int falseSpriteId){
         View row = ((ViewGroup) tableView).getChildAt(posY);
         ImageView image =(ImageView) ((ViewGroup) row).getChildAt(posX);
 
-        if(cellValue==true)image.setImageResource(R.drawable.ship_sprite);
-        else image.setImageResource(R.drawable.empty_cell_sprite);
+        if(cellValue==true)image.setImageResource(trueSpriteId);
+        else image.setImageResource(falseSpriteId);
     }
     public int[] GetTableElement(int [] coordinates){
 
