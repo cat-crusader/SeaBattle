@@ -10,10 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SeaBattle">
         <activity
-            android:name=".Game"
+            android:name=".BattleActivity"
             android:exported="false" />
         <activity
-            android:name=".PlacementOfShips"
+            android:name=".PlacementOfShipsActivity"
             android:parentActivityName=".MainActivity"
             android:exported="false" />
         <meta-data

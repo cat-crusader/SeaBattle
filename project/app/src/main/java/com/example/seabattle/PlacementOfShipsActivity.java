@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
-public class PlacementOfShips extends AppCompatActivity implements
+public class PlacementOfShipsActivity extends AppCompatActivity implements
         View.OnTouchListener,
         GestureDetector.OnGestureListener,
         View.OnDragListener{
@@ -125,13 +125,16 @@ public class PlacementOfShips extends AppCompatActivity implements
     public void AutoPlaceFleet(){
         for (int t = 0; t < shipsAmmount.length; t++) {
             int shipsInType = shipsAmmount[t];
+            for (int i = 0; i < shipsInType; i++) {
                 AutoPlaceShip(t+1);
+            }
+
 
         }
     }
     public void AutoPlaceShip(int shipLength){
         int shipAmmount = shipsStack.size();
-        while (shipAmmount==shipsStack.size()||shipsAmmount[shipLength-1]>0){
+        while (shipAmmount==shipsStack.size()&&shipsAmmount[shipLength-1]>0){
             Random r = new Random();
             boolean rotation = r.nextBoolean();
             int randomYPos = (shipLength-1) + (int) (Math.random() * 10);

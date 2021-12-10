@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PlacementOfShips"
+    tools:context=".PlacementOfShipsActivity"
     android:layout_margin="60px">
 
     <ImageView
@@ -58,4 +58,12 @@
         android:layout_above="@id/button_rotation"
         android:layout_centerHorizontal="true"
         android:text="Auto Place" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="#8BC34A"
+        android:text="Play" />
 </RelativeLayout>
