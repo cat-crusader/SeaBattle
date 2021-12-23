@@ -216,12 +216,13 @@ public class PlacementOfShipsActivity extends AppCompatActivity implements
         uiManager.UpdateTableByValue(shipsGrid,tableView,R.drawable.ship_sprite,R.drawable.empty_cell_sprite);
     }//try to put ship on grid// updates UI table TODO: 10.12.2021 Separate UI part from "physics" in this code: use observer
 
+
     boolean isInsideElement(int elemPosX,int elemPosY,int width,int height,int posX,int posY){
         if(elemPosX>posX||elemPosY>posY)return false;
         if(elemPosX+width<posX||elemPosY+height<posY)return false;
 
         return true;
-    }// Check if current dragging view is inside UI table
+    }// Checks if current dragging view is inside UI table
     void SetDrag(View view,int width,int height,MotionEvent e){
         int[] viewCoordinates = new int[2];
         view.getLocationOnScreen(viewCoordinates);
