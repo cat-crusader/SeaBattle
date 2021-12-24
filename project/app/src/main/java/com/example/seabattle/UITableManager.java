@@ -34,7 +34,7 @@ public class UITableManager implements EventListener{
         UpdateTableByValue(shipsGrid,tableView,R.drawable.ship_sprite,R.drawable.empty_cell_sprite);
     }
 
-    public void InitiateTable(Grid grid,TableLayout tableLayout){
+    public void InitiateTable(Grid grid,TableLayout tableLayout){// TODO: 24.12.2021 ! Currently works only with 10 x 10 table !
         for (int i = 0; i < 10; i++) {
 
             TableRow tr = new TableRow(context);
@@ -50,6 +50,7 @@ public class UITableManager implements EventListener{
             }
             tableLayout.addView(tr);
         }
+        UpdateTableByValue(grid,tableLayout,R.drawable.ship_sprite,R.drawable.empty_cell_sprite);
     }// Initiate UI table// currently always initiate 10x10 table
 
     public void UpdateTableByValue(Grid grid,TableLayout tableLayout, int shipSpriteId, int emptySpriteId){

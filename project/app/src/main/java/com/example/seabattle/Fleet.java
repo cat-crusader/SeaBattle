@@ -30,9 +30,11 @@ public class Fleet {
         this.events = new EventManager("update");
     }
     public Fleet(Grid _shipsGrid){//used to copy fleet to battle
-
-
+        shipsGrid = _shipsGrid;
+        Log.d(TAG,"fuck");
+        shipsGrid.LogGrid();
         this.events = new EventManager("update");
+        events.notify("update");
     }
 
     public Grid getShipsGrid() {
