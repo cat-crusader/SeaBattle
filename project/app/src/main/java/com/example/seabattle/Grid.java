@@ -4,7 +4,7 @@ import android.util.Log;
 
 import java.util.Arrays;
 
-public class Grid {
+public class Grid {// TODO: 24.12.2021 !Currently work only with square size arrays only!
     private  static final String TAG = "GRID";
 
     private boolean[][] grid;
@@ -40,6 +40,13 @@ public class Grid {
         sizeX = _sizeX;
         sizeY = _sizeY;
         grid = new boolean[sizeX][sizeY];
+    }
+    public Grid(boolean[][] _grid){
+
+        grid = _grid.clone();
+//        LogGrid();
+        sizeX=_grid.length;
+        sizeY=_grid.length;
     }
     public void fill(boolean filler){
         for (boolean[] row: grid)

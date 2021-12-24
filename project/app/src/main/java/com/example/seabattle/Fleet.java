@@ -8,7 +8,7 @@ import java.util.Random;
 import java.util.Stack;
 
 public class Fleet {
-
+    private  static final String TAG = "Fleet";
     private Grid shipsGrid;
     private Grid shadowGrid;
 
@@ -65,8 +65,8 @@ public class Fleet {
         return true;
     }//Check if cell coords is inside grid
     public void AutoPlaceFleet(){
-        for (int t = 0; t < shipsAmmount.length; t++) {
-            int shipsInType = shipsAmmount[t];
+        for (int t = shipsAmmount.length-1; t >=0; t--) {
+            int shipsInType = shipsAmmount[t];//ship ammount of this type
             for (int i = 0; i < shipsInType; i++) {
                 AutoPlaceShip(t+1);
             }
@@ -75,15 +75,20 @@ public class Fleet {
         }
     }//auto place all ships on grid
     public void AutoPlaceShip(int shipLength){
-        int shipAmmount = shipsStack.size();
-        while (shipAmmount==shipsStack.size()&&shipsAmmount[shipLength-1]>0){
-            Random r = new Random();
-            boolean rotation = r.nextBoolean();
+        int shipAmmount = shipsStack.size();// current ammount of ships
+        Random r = new Random();
+        boolean rotation = r.nextBoolean();
+        while (shipAmmount==shipsStack.size()){
+
             int randomYPos = (shipLength-1) + (int) (Math.random() * 10);
             int randomXPos = 0 + (int) (Math.random() * (11-shipLength));
             PlaceShip(new int[]{randomXPos,randomYPos},shipLength);
-        }
 
+        }
+        if(rotation){
+            Log.d(TAG,"Ship should be rotated"+shipsStack.peek().getLength());
+            RotateShip();
+        }
 
 
     }//auto place type of ship on grid

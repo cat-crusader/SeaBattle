@@ -21,13 +21,13 @@ public class Ship {
     }
 
     public void Rotate(){
-        Log.d(TAG, "ship gets rotated"+ rotatedVertically);
+//        Log.d(TAG, "ship gets rotated"+ rotatedVertically);
         rotatedVertically=!rotatedVertically;
-        Log.d(TAG, "ship  rotated"+ rotatedVertically);
+//        Log.d(TAG, "ship  rotated"+ rotatedVertically);
         InitiateShip();
     }
     public void Place(int[]cellPosition,boolean isCursorInUpperHalf){
-        Log.d(TAG, "Placing ship"+length);
+//        Log.d(TAG, "Placing ship"+length);
         switch (length){
             case 1:
                     rootCell = cellPosition;
@@ -44,7 +44,7 @@ public class Ship {
                 else rootCell = new int[] {cellPosition[0],cellPosition[1]+2};
                 break;
         }
-        Log.d(TAG, "Initiating ship : "+rootCell[0]+":"+rootCell[1]);
+//        Log.d(TAG, "Initiating ship : "+rootCell[0]+":"+rootCell[1]);
         rotatedVertically=true;
         InitiateShip();
     }
@@ -55,15 +55,15 @@ public class Ship {
     }
     public void InitiateShip(){
         corpus.clear();
-        Log.d(TAG, "corpus is empty: "+corpus.isEmpty());
+//        Log.d(TAG, "corpus is empty: "+corpus.isEmpty());
         if(rotatedVertically){
             for (int i = 0; i < length; i++) {
-                Log.d(TAG, "Initiate corpus: "+rootCell[0]+":"+(rootCell[1]-i));
+//                Log.d(TAG, "Initiate corpus: "+rootCell[0]+":"+(rootCell[1]-i));
                 corpus.add(new int[]{rootCell[0],(rootCell[1]-i)});
             } }
         else {
             for (int i = 0; i < length; i++) {
-                Log.d(TAG, "Initiate corpus: " + (rootCell[0] + i) + ":" + rootCell[1]);
+//                Log.d(TAG, "Initiate corpus: " + (rootCell[0] + i) + ":" + rootCell[1]);
                 corpus.add(new int[]{(rootCell[0] + i), rootCell[1]});
 
             } }

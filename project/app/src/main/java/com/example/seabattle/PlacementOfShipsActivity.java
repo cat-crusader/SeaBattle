@@ -3,6 +3,7 @@ package com.example.seabattle;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
@@ -94,6 +95,21 @@ public class PlacementOfShipsActivity extends AppCompatActivity implements
                 myFleet.AutoPlaceFleet();
             }
         });
+
+        Button moveToBattleActivityButton = findViewById(R.id.button_start_battle);
+        moveToBattleActivityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PlacementOfShipsActivity.this, BattleActivity.class);
+                Grid shipsGrid = myFleet.getShipsGrid();
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable("keyShipsGrid", shipsGrid.getGrid());
+                intent.putExtras(mBundle);
+//                intent.putExtra("keyShipsGrid",shipsGrid.getGrid());
+                startActivity(intent);
+            }
+        });
+
 
     }
 

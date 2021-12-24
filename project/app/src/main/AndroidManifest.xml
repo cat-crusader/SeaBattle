@@ -11,6 +11,7 @@
         android:theme="@style/Theme.SeaBattle">
         <activity
             android:name=".BattleActivity"
+            android:parentActivityName=".PlacementOfShipsActivity"
             android:exported="false" />
         <activity
             android:name=".PlacementOfShipsActivity"
