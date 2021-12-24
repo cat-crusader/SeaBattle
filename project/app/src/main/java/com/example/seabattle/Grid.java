@@ -52,10 +52,35 @@ public class Grid {// TODO: 24.12.2021 !Currently work only with square size arr
         for (boolean[] row: grid)
             Arrays.fill(row, filler);
     }
+    public boolean InsideGrid(int posX,int posY){
+        if(posX>sizeX||posY>sizeY)return false;
+        if(posX<0||posY<0)return false;//out of grid
+        return true;
+    }
+    public boolean InsideGrid(int[]cellCoordinates){
+        if(cellCoordinates[0]>sizeX||cellCoordinates[1]>sizeY)return false;
+        if(cellCoordinates[0]<0||cellCoordinates[1]<0)return false;//out of grid
+        return true;
+    }
 
     public void SetCell(int xPos,int yPos,boolean value){
         grid[xPos][yPos] = value;
     }
+    public void SetCell(int[]cellCoordinates,boolean value){ grid[cellCoordinates[0]][cellCoordinates[1]] = value; }
+
+    public boolean GetCell(int posX,int posY){
+        if(InsideGrid(posX,posY)){
+            return grid[posX][posY];
+        }
+        return false;
+    }
+    public boolean GetCell(int[] cellCoordinates){
+        if(InsideGrid(cellCoordinates)){
+            return grid[cellCoordinates[0]][cellCoordinates[1]];
+        }
+        return false;
+    }
+
     public void LogGrid(){
         for (int i = 0; i < sizeX ; i++) {
             String row="";

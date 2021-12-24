@@ -56,7 +56,16 @@ public class BattleActivity extends AppCompatActivity {
         player1Fleet.events.subscribe("update",player1UITableManager);
 
         player1UITableManager.InitiateTable(player1Fleet.getShipsGrid(),player1tableView);
-//        shipsGrid.LogGrid();
+        //player 1
+
+
+        player2Fleet = new Fleet();
+        player2Fleet.AutoPlaceFleet();
+        player2UITableManager = new UITableManager(this,player2tableView, player2Fleet.getShipsGrid());
+        player2Fleet.events.subscribe("update",player2UITableManager);
+
+        player2UITableManager.InitiateTable(player2Fleet.getShipsGrid(),player2tableView);
+        //player 2
     }
 
 

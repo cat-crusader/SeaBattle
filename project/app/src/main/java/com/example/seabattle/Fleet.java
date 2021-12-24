@@ -11,6 +11,7 @@ public class Fleet {
     private  static final String TAG = "Fleet";
     private Grid shipsGrid;
     private Grid shadowGrid;
+    private Grid hitGrid;
 
     private boolean finished;
 
@@ -21,18 +22,20 @@ public class Fleet {
     public EventManager events;
 
 
-    public Fleet(){
+    public Fleet(){//constructor for placing
         shipsGrid = new Grid(10,10);
+        shipsGrid.fill(false);
         shadowGrid = new Grid(10,10);
         shadowGrid.fill(true);
-        shipsGrid.fill(false);
+
 
         this.events = new EventManager("update");
     }
-    public Fleet(Grid _shipsGrid){//used to copy fleet to battle
+    public Fleet(Grid _shipsGrid){//constructor for battle
         shipsGrid = _shipsGrid;
-        Log.d(TAG,"fuck");
-        shipsGrid.LogGrid();
+        hitGrid = new Grid(10,10);
+        hitGrid.fill(false);
+
         this.events = new EventManager("update");
         events.notify("update");
     }
@@ -44,7 +47,7 @@ public class Fleet {
     public void setShipsGrid(Grid shipsGrid) {
         this.shipsGrid = shipsGrid;
     }
-
+    //region === Placing Region ===
     boolean CanBePlaced(Ship ship){
         ArrayList<int[]> shipPart = ship.getCorpus();
         for (int[] part: shipPart
@@ -95,7 +98,7 @@ public class Fleet {
 
     }//auto place type of ship on grid
 
-    void PlaceShip(int[] cell,int length) {
+    public void PlaceShip(int[] cell,int length) {
         Ship newShip = new Ship(length);
         newShip.Place(cell);
 
@@ -160,4 +163,11 @@ public class Fleet {
 //        uiTableManager.UpdateTableByValue(shipsGrid,tableView,R.drawable.ship_sprite,R.drawable.empty_cell_sprite);
 //        shipsGrid.LogGrid();
     }//try to rotate ship on grid// updates UI table
+    //endregion
+
+    //region === Combat Region ===
+    public void TakeHit(int[]cellCoordinates){
+        if(!hitGrid.GetCell(cellCoordinates))hitGrid.SetCell(cellCoordinates,true);
+    }
+    //endregion
     }
