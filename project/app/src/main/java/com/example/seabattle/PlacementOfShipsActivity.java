@@ -60,8 +60,8 @@ public class PlacementOfShipsActivity extends AppCompatActivity implements
         mGestureDetector = new GestureDetector(this,this);
 
         myFleet = new Fleet();
-        uiTableManager = new UITableManager(this,tableView, myFleet.getShipsGrid());
-        myFleet.events.subscribe("update",uiTableManager);
+        uiTableManager = new UITableManager(this,tableView, myFleet.getShipsGrid(),myFleet.getHitGrid());
+        myFleet.events.subscribe("placing_update",uiTableManager);
 
         uiTableManager.InitiateTable(new Grid(10,10),tableView);
 

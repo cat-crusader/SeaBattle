@@ -27,21 +27,26 @@ public class Fleet {
         shipsGrid.fill(false);
         shadowGrid = new Grid(10,10);
         shadowGrid.fill(true);
+        hitGrid = new Grid(10,10);
+        hitGrid.fill(false);
 
 
-        this.events = new EventManager("update");
+        this.events = new EventManager("placing_update","battle_update");
     }
     public Fleet(Grid _shipsGrid){//constructor for battle
         shipsGrid = _shipsGrid;
         hitGrid = new Grid(10,10);
         hitGrid.fill(false);
 
-        this.events = new EventManager("update");
-        events.notify("update");
+        this.events = new EventManager("placing_update","battle_update");
+        events.notify("battle_update");
     }
 
     public Grid getShipsGrid() {
         return shipsGrid;
+    }
+    public Grid getHitGrid() {
+        return hitGrid;
     }
 
     public void setShipsGrid(Grid shipsGrid) {
@@ -127,7 +132,7 @@ public class Fleet {
         }
 
 
-    events.notify("update");
+    events.notify("placing_update");
     }
     public void RotateShip(){
 
@@ -159,15 +164,32 @@ public class Fleet {
         shipsStack.pop();
         shipsStack.add(rotatedShip);
 
-        events.notify("update");
+        events.notify("placing_update");
 //        uiTableManager.UpdateTableByValue(shipsGrid,tableView,R.drawable.ship_sprite,R.drawable.empty_cell_sprite);
 //        shipsGrid.LogGrid();
     }//try to rotate ship on grid// updates UI table
     //endregion
 
     //region === Combat Region ===
-    public void TakeHit(int[]cellCoordinates){
-        if(!hitGrid.GetCell(cellCoordinates))hitGrid.SetCell(cellCoordinates,true);
+    public boolean TakeHit(int[]cellCoordinates){
+        if(!hitGrid.GetCell(cellCoordinates)) {
+            hitGrid.SetCell(cellCoordinates, true);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    public boolean TakeHit(int posX,int posY){
+        if(!hitGrid.GetCell(posX,posY)) {
+            hitGrid.SetCell(posX,posY, true);
+            Log.d(TAG,"Got hitted:"+posX+":"+posY);
+            events.notify("battle_update");
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     //endregion
     }
