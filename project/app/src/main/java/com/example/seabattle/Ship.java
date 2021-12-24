@@ -2,10 +2,11 @@ package com.example.seabattle;
 
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class Ship {
+public class Ship implements Serializable {
     private  static final String TAG = "SHIP";
     private int length;
     private int[]rootCell;

@@ -16,10 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TableLayout;
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Stack;
-
 public class PlacementOfShipsActivity extends AppCompatActivity implements
         View.OnTouchListener,
         GestureDetector.OnGestureListener,
@@ -63,7 +59,7 @@ public class PlacementOfShipsActivity extends AppCompatActivity implements
         uiTableManager = new UITableManager(this,tableView, myFleet.getShipsGrid(),myFleet.getHitGrid());
         myFleet.events.subscribe("placing_update",uiTableManager);
 
-        uiTableManager.InitiateTable(new Grid(10,10),tableView);
+        uiTableManager.initiateTable(new Grid(10,10),tableView);
 
 
 //        Arrays.fill(,true);
@@ -83,7 +79,7 @@ public class PlacementOfShipsActivity extends AppCompatActivity implements
         rotationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    myFleet.RotateShip();
+                    myFleet.rotateShip();
             }
         });
 
@@ -92,7 +88,7 @@ public class PlacementOfShipsActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
 
-                myFleet.AutoPlaceFleet();
+                myFleet.autoPlaceFleet();
             }
         });
 
@@ -104,6 +100,11 @@ public class PlacementOfShipsActivity extends AppCompatActivity implements
                 Grid shipsGrid = myFleet.getShipsGrid();
                 Bundle mBundle = new Bundle();
                 mBundle.putSerializable("keyShipsGrid", shipsGrid.getGrid());
+//                mBundle.putSerializable("keyShipsStack", myFleet.getShipsStack());
+
+                //To pass:
+//                intent.putExtra("keyFleet", myFleet);
+
                 intent.putExtras(mBundle);
 //                intent.putExtra("keyShipsGrid",shipsGrid.getGrid());
                 startActivity(intent);
@@ -118,7 +119,7 @@ public class PlacementOfShipsActivity extends AppCompatActivity implements
 
     //region UI
     void PlaceShipOnDrop(DragEvent event, View v){
-        int[] cell = uiTableManager.GetCellCoordsFromUITable(tableView,
+        int[] cell = uiTableManager.getCellCoordsFromUITable(tableView,
                                                         new int[]{(int)event.getX(),(int)(event.getY())});
 
         boolean isUpperPart=false;
@@ -148,7 +149,7 @@ public class PlacementOfShipsActivity extends AppCompatActivity implements
             length=4;
 
         }
-        myFleet.PlaceShip(cell,length);
+        myFleet.placeShip(cell,length);
 //        PlaceShip(cell,length);
 
     }//Converts drop coords into grid coords // and place ship there

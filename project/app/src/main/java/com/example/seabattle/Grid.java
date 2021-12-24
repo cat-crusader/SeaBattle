@@ -52,36 +52,47 @@ public class Grid {// TODO: 24.12.2021 !Currently work only with square size arr
         for (boolean[] row: grid)
             Arrays.fill(row, filler);
     }
-    public boolean InsideGrid(int posX,int posY){
+    public boolean insideGrid(int posX, int posY){
         if(posX>sizeX||posY>sizeY)return false;
         if(posX<0||posY<0)return false;//out of grid
         return true;
     }
-    public boolean InsideGrid(int[]cellCoordinates){
+    public boolean insideGrid(int[]cellCoordinates){
         if(cellCoordinates[0]>sizeX||cellCoordinates[1]>sizeY)return false;
         if(cellCoordinates[0]<0||cellCoordinates[1]<0)return false;//out of grid
         return true;
     }
 
-    public void SetCell(int xPos,int yPos,boolean value){
+    public void setCell(int xPos, int yPos, boolean value){
         grid[xPos][yPos] = value;
     }
-    public void SetCell(int[]cellCoordinates,boolean value){ grid[cellCoordinates[0]][cellCoordinates[1]] = value; }
+    public void setCell(int[]cellCoordinates, boolean value){ grid[cellCoordinates[0]][cellCoordinates[1]] = value; }
 
-    public boolean GetCell(int posX,int posY){
-        if(InsideGrid(posX,posY)){
+    public boolean getCell(int posX, int posY){
+        if(insideGrid(posX,posY)){
             return grid[posX][posY];
         }
         return false;
     }
-    public boolean GetCell(int[] cellCoordinates){
-        if(InsideGrid(cellCoordinates)){
+    public boolean getCell(int[] cellCoordinates){
+        if(insideGrid(cellCoordinates)){
             return grid[cellCoordinates[0]][cellCoordinates[1]];
         }
         return false;
     }
 
-    public void LogGrid(){
+    public Grid AND(Grid _grid){
+        Grid result = new Grid(10,10);
+        result.fill(false);
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                if(getCell(i,j)==_grid.getCell(i,j)&& getCell(i,j)==true)result.setCell(i,j,true);
+            }
+        }
+        return result;
+    }
+
+    public void logGrid(){
         for (int i = 0; i < sizeX ; i++) {
             String row="";
             for (int j = 0; j < sizeY; j++) {

@@ -1,13 +1,13 @@
 package com.example.seabattle;
 
 import android.util.Log;
-import android.view.GestureDetector;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
-public class Fleet {
+public class Fleet implements Serializable{
     private  static final String TAG = "Fleet";
     private Grid shipsGrid;
     private Grid shadowGrid;
@@ -17,7 +17,15 @@ public class Fleet {
 
     private int[] shipsAmmount ={4,3,2,1};
     private int shipsCount=0;
-    private Stack<Ship> shipsStack = new Stack<>();
+
+    public Stack<Ship> getShipsStack() {
+        return shipsStack;
+    }
+    public void setShipsStack(Stack<Ship> shipsStack) {
+        this.shipsStack = shipsStack;
+    }
+
+    private  Stack<Ship> shipsStack = new Stack<>();
 
     public EventManager events;
 
@@ -53,7 +61,7 @@ public class Fleet {
         this.shipsGrid = shipsGrid;
     }
     //region === Placing Region ===
-    boolean CanBePlaced(Ship ship){
+    boolean canBePlaced(Ship ship){
         ArrayList<int[]> shipPart = ship.getCorpus();
         for (int[] part: shipPart
         ) {
@@ -67,24 +75,24 @@ public class Fleet {
 
         return true;
     }//Check if ship can be placed on *this* grid
-    boolean InBounds(int[] cell){
+    boolean inBounds(int[] cell){
 
         if(cell[0]>9||cell[1]>9)return false;
         if(cell[0]<0||cell[1]<0)return false;//out of grid
 
         return true;
     }//Check if cell coords is inside grid
-    public void AutoPlaceFleet(){
+    public void autoPlaceFleet(){
         for (int t = shipsAmmount.length-1; t >=0; t--) {
             int shipsInType = shipsAmmount[t];//ship ammount of this type
             for (int i = 0; i < shipsInType; i++) {
-                AutoPlaceShip(t+1);
+                autoPlaceShip(t+1);
             }
 
 
         }
     }//auto place all ships on grid
-    public void AutoPlaceShip(int shipLength){
+    public void autoPlaceShip(int shipLength){
         int shipAmmount = shipsStack.size();// current ammount of ships
         Random r = new Random();
         boolean rotation = r.nextBoolean();
@@ -92,18 +100,18 @@ public class Fleet {
 
             int randomYPos = (shipLength-1) + (int) (Math.random() * 10);
             int randomXPos = 0 + (int) (Math.random() * (11-shipLength));
-            PlaceShip(new int[]{randomXPos,randomYPos},shipLength);
+            placeShip(new int[]{randomXPos,randomYPos},shipLength);
 
         }
         if(rotation){
             Log.d(TAG,"Ship should be rotated"+shipsStack.peek().getLength());
-            RotateShip();
+            rotateShip();
         }
 
 
     }//auto place type of ship on grid
 
-    public void PlaceShip(int[] cell,int length) {
+    public void placeShip(int[] cell, int length) {
         Ship newShip = new Ship(length);
         newShip.Place(cell);
 
@@ -113,12 +121,12 @@ public class Fleet {
             for (int[] part : shadowList
             ) {
 //            if(InBounds(part))
-                if (InBounds(part)) shadowGrid.SetCell(part[0], part[1], false);
+                if (inBounds(part)) shadowGrid.setCell(part[0], part[1], false);
                 //RedactCellElement(true,part[0],part[1]);
             }
         }
 
-        if (!CanBePlaced(newShip)) return;
+        if (!canBePlaced(newShip)) return;
         if (shipsAmmount[length - 1] <= 0) return;
 
 
@@ -127,29 +135,29 @@ public class Fleet {
         ArrayList<int[]> shipList = shipsStack.peek().getCorpus();
         for (int[] part : shipList
         ) {
-            shipsGrid.SetCell(part[0], part[1], true);
+            shipsGrid.setCell(part[0], part[1], true);
             //RedactCellElement(true,part[0],part[1]);
         }
 
 
     events.notify("placing_update");
     }
-    public void RotateShip(){
+    public void rotateShip(){
 
         Ship rotatedShip = shipsStack.peek();
         rotatedShip.Rotate();
 
-        if(!CanBePlaced(rotatedShip))return;
+        if(!canBePlaced(rotatedShip))return;
         rotatedShip.Rotate();
         ArrayList<int[]> rotatedShipList = rotatedShip.getCorpus();
 
 
 
 
-        shipsGrid.LogGrid();
+        shipsGrid.logGrid();
         for (int[] part: rotatedShipList//deleting old version
         ) {
-            shipsGrid.SetCell(part[0],part[1],false);
+            shipsGrid.setCell(part[0],part[1],false);
 //            Log.d(TAG,"deleting: "+part[0]+":"+part[1]);
             //RedactCellElement(true,part[0],part[1]);
         }
@@ -158,7 +166,7 @@ public class Fleet {
 //        shipsGrid.LogGrid();
         for (int[] part: rotatedShipList//setting rotated version
         ) {
-            shipsGrid.SetCell(part[0],part[1],true);
+            shipsGrid.setCell(part[0],part[1],true);
             //RedactCellElement(true,part[0],part[1]);
         }
         shipsStack.pop();
@@ -171,18 +179,18 @@ public class Fleet {
     //endregion
 
     //region === Combat Region ===
-    public boolean TakeHit(int[]cellCoordinates){
-        if(!hitGrid.GetCell(cellCoordinates)) {
-            hitGrid.SetCell(cellCoordinates, true);
+    public boolean takeHit(int[]cellCoordinates){
+        if(!hitGrid.getCell(cellCoordinates)) {
+            hitGrid.setCell(cellCoordinates, true);
             return true;
         }
         else {
             return false;
         }
     }
-    public boolean TakeHit(int posX,int posY){
-        if(!hitGrid.GetCell(posX,posY)) {
-            hitGrid.SetCell(posX,posY, true);
+    public boolean takeHit(int posX, int posY){
+        if(!hitGrid.getCell(posX,posY)) {
+            hitGrid.setCell(posX,posY, true);
             Log.d(TAG,"Got hitted:"+posX+":"+posY);
             events.notify("battle_update");
             return true;

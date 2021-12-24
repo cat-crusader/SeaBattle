@@ -34,16 +34,18 @@ public class UITableManager implements EventListener{
     public void update(String eventType){
         Log.d(TAG,"UI updates");
         if(eventType=="placing_update") {
-            UpdateTableByValue(shipsGrid, tableView, R.drawable.ship_sprite, true);
-            UpdateTableByValue(shipsGrid, tableView, R.drawable.empty_cell_sprite, false);
+            updateTableByValue(shipsGrid, tableView, R.drawable.ship_sprite, true);
+            updateTableByValue(shipsGrid, tableView, R.drawable.empty_cell_sprite, false);
         }
         else if(eventType =="battle_update"){
-            UpdateTableByValue(hitGrid, tableView, R.drawable.shadow_cell_sprite, true);
-            UpdateTableByValue(hitGrid, tableView, R.drawable.fog_of_war_cell, false);
+
+            updateTableByValue(hitGrid, tableView, R.drawable.shadow_cell_sprite, true);
+            updateTableByValue(hitGrid, tableView, R.drawable.fog_of_war_cell, false);
+            updateTableByValue(hitGrid.AND(shipsGrid), tableView, R.drawable.hitted_ship_cell, true);
         }
     }
 
-    public void InitiateTable(Grid grid,TableLayout tableLayout){// TODO: 24.12.2021 ! Currently works only with 10 x 10 table !
+    public void initiateTable(Grid grid, TableLayout tableLayout){// TODO: 24.12.2021 ! Currently works only with 10 x 10 table !
         for (int i = 0; i < 10; i++) {
 
             TableRow tr = new TableRow(context);
@@ -62,7 +64,7 @@ public class UITableManager implements EventListener{
 //        UpdateTableByValue(grid,tableLayout,R.drawable.ship_sprite,R.drawable.empty_cell_sprite);
     }// Initiate UI table// currently always initiate 10x10 table
 
-    public void UpdateTableByValue(Grid grid,TableLayout tableLayout, int shipSpriteId, boolean value){
+    public void updateTableByValue(Grid grid, TableLayout tableLayout, int shipSpriteId, boolean value){
 
         boolean[][]table = grid.getGrid();
 
@@ -70,7 +72,7 @@ public class UITableManager implements EventListener{
             for (int j = 0; j < grid.getSizeY(); j++) {
 
                 if(table[i][j]==value) {
-                    RedactCellElement(tableLayout,true, i, j,shipSpriteId);
+                    redactCellElement(tableLayout,true, i, j,shipSpriteId);
 //                    Log.d(TAG,"Cell: "+i+" : "+j+" are ship");
                 }
                 //else RedactCellElement(tableLayout,false,i,j,shipSpriteId);
@@ -78,7 +80,7 @@ public class UITableManager implements EventListener{
         }
     }// refresh UI table
 
-    public void RedactCellElement(TableLayout tableLayout,boolean cellValue,int posX,int posY,int trueSpriteId){
+    public void redactCellElement(TableLayout tableLayout, boolean cellValue, int posX, int posY, int trueSpriteId){
         View row = ((ViewGroup) tableLayout).getChildAt(posY);
         ImageView image =(ImageView) ((ViewGroup) row).getChildAt(posX);
 
@@ -86,7 +88,7 @@ public class UITableManager implements EventListener{
         //else image.setImageResource(falseSpriteId);
     }// Set image of cell in UI table
 
-    public int[] GetCellCoordsFromUITable(TableLayout tableLayout,int [] coordinates){
+    public int[] getCellCoordsFromUITable(TableLayout tableLayout, int [] coordinates){
 
         int[] tableCoordinates = new int[2];
         tableLayout.getLocationOnScreen(tableCoordinates);
